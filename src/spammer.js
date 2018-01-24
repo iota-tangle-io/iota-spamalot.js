@@ -77,17 +77,18 @@ function spam () {
 
             console.log('Attaching to Tangle...');
 
-            iota.api.sendTrytes(trytes, 27, 14, function(error, result) {
+            iota.api.sendTrytes(trytes, 9, 15, function(error, result) {
 
                 if (error) {
-                  console.error(error);
+                  console.log("Error in tips selection.");
+                  address_index -= 1;
+                  setTimeout(run, 0, null);
                   return -1;
-
                 } else {
 
                   console.log('Spam complete.');
                   //delayBetween
-                  setTimeout(run, 10000, null);
+                  setTimeout(run, 100, null);
                   return 1;
                 }
             })
