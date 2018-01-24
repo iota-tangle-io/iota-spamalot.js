@@ -77,7 +77,7 @@ function spam () {
 
             console.log('Attaching to Tangle...');
 
-            iota.api.sendTrytes(trytes, 27, 14, function(error, result) {
+            iota.api.sendTrytes(trytes, 35, 14, function(error, result) {
 
                 if (error) {
                   console.error(error);
