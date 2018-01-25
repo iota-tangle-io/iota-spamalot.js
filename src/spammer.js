@@ -2,8 +2,6 @@
 //##                  SETUP                  ##
 //#############################################
 
-// node spammer.js -depth -timeout
-
 let IOTA = require('../node_modules/iota.lib.js/lib/iota');
 
 let iota = new IOTA({
