@@ -14,19 +14,24 @@ let seed = generateSeed();
 var address_index = 0;
 var tx_address = '';
 
+let tag = '999SPAMALOT';
+
+let round = 0;
+var tps = 0.0;
+var success = 0.0;
+
 let depth = process.argv[2] || 4;
 let timeout = process.argv[3] || 0;
 let debug = process.argv[4] || true;
 
-dbg('\n###########################');
-dbg('##   IOTA-SPAMMER v1.1   ##');
-dbg('###########################');
-dbg('\nseed: ' + seed);
-dbg('depth: ' + depth);
-dbg('timeout: ' + timeout + "\n");
+console.log('\n###########################');
+console.log('##   IOTA-SPAMMER v1.1   ##');
+console.log('###########################');
+console.log('\nseed: ' + seed);
+console.log('tag:  ' + tag + '\n');
 
 //delayBefore
-setTimeout(run, 5000, null);
+setTimeout(run, 1000, null);
 
 //#############################################
 //##              EXECUTION HEAD             ##
@@ -34,6 +39,7 @@ setTimeout(run, 5000, null);
 
 function run () {
   /* if (additional conditions) */
+  round += 1;
   spam();
 }
 
@@ -57,14 +63,15 @@ function spam () {
     } else {
 
         tx_address = data[0];
-        dbg('Address at index[' + address_index + ']: ' + tx_address);
+        dbg(round + '.');
+        dbg('address: ' + tx_address);
         address_index += 1;
 
         var transfersArray = [{
               'address': rec_address,
               'value': 0,
               'message': '999JS999ONEPOINTONE',
-              'tag': '999SPAMALOT'
+              'tag': tag
           }]
 
         var inputs = [{
@@ -80,24 +87,21 @@ function spam () {
             return -1;
 
           } else {
-              
-            dbg('Attaching to Tangle...');
 
             iota.api.sendTrytes(trytes, depth, 14, function(error, result) {
 
                 if (error) {
-                    
-                  dbg("[Error in tips selection.]");
+                  dbg('status:  error in tips selection\n');
                   address_index -= 1;
                   setTimeout(run, 0, null);
                   return -1;
-                    
                 } else {
-                    
-                  dbg('Spam complete.');
+                  success += 1;
+                  dbg('hash:    ' + result[0].hash);
+                  dbg('status:  finished');
+                  dbg('success: ' + success * 100.0 / round + '%\n');
                   setTimeout(run, timeout, null);
                   return 1;
-                    
                 }
             })
 
