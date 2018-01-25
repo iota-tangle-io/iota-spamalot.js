@@ -2,22 +2,30 @@
 //##                  SETUP                  ##
 //#############################################
 
-var IOTA = require('../node_modules/iota.lib.js/lib/iota');
+// node spammer.js -depth -timeout
 
-var iota = new IOTA({
+let IOTA = require('../node_modules/iota.lib.js/lib/iota');
+
+let iota = new IOTA({
     'host': 'http://localhost',
     'port': 14265
 });
 
-var seed = generateSeed();
+let rec_address = 'SPPRLTTIVYUONPOPQSWGCPMZWDOMQGWFUEPKUQIVUKROCHRNCR9MXNGNQSAGLKUDX9MZQWCPFJQS9DWAY'; /* nowhere */
+let seed = generateSeed();
 var address_index = 0;
 var tx_address = '';
-var rec_address = 'YMT9TLFHOWHE9NVZ9MS9LOGZNJW9WNCJKRUXQSFH9DVIDULZJWKNER999AUHXUSD9YIGJXRKXTUDGMBGC'; /* nowhere */
 
-console.log('\n###########################');
-console.log('##   IOTA-SPAMMER v1.0   ##');
-console.log('###########################');
-console.log('\nSeed: ' + seed);
+let depth = process.argv[2] || 4;
+let timeout = process.argv[3] || 0;
+let debug = process.argv[4] || true;
+
+dbg('\n###########################');
+dbg('##   IOTA-SPAMMER v1.1   ##');
+dbg('###########################');
+dbg('\nseed: ' + seed);
+dbg('depth: ' + depth);
+dbg('timeout: ' + timeout + "\n");
 
 //delayBefore
 setTimeout(run, 5000, null);
@@ -51,20 +59,20 @@ function spam () {
     } else {
 
         tx_address = data[0];
-        console.log('Address at index[' + address_index + ']: ' + tx_address);
+        dbg('Address at index[' + address_index + ']: ' + tx_address);
         address_index += 1;
 
         var transfersArray = [{
               'address': rec_address,
               'value': 0,
-              'message': '99THIS99IS99SPAM99',
-              'tag': '99THIS99IS99SPAM99'
+              'message': '999JS999ONEPOINTONE',
+              'tag': '999SPAMALOT'
           }]
 
         var inputs = [{
               'keyIndex': address_index-1,
               'address': tx_address,
-              'security': 2
+              'security': 1
           }]
 
         iota.api.prepareTransfers(seed, transfersArray, inputs, function(error, trytes) {
@@ -74,22 +82,24 @@ function spam () {
             return -1;
 
           } else {
+              
+            dbg('Attaching to Tangle...');
 
-            console.log('Attaching to Tangle...');
-
-            iota.api.sendTrytes(trytes, 9, 15, function(error, result) {
+            iota.api.sendTrytes(trytes, depth, 14, function(error, result) {
 
                 if (error) {
-                  console.log("Error in tips selection.");
+                    
+                  dbg("[Error in tips selection.]");
                   address_index -= 1;
                   setTimeout(run, 0, null);
                   return -1;
+                    
                 } else {
-
-                  console.log('Spam complete.');
-                  //delayBetween
-                  setTimeout(run, 100, null);
+                    
+                  dbg('Spam complete.');
+                  setTimeout(run, timeout, null);
                   return 1;
+                    
                 }
             })
 
@@ -114,4 +124,9 @@ function generateSeed () {
    address += trytes.charAt(Math.floor(Math.random() * trytes.length));
 
  return address;
+}
+
+function dbg (msg) {
+  if (debug)
+    console.log(msg);
 }
