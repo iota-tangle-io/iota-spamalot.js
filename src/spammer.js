@@ -38,9 +38,13 @@ setTimeout(run, 1000, null);
 //#############################################
 
 function run () {
-  /* if (additional conditions) */
-  round += 1;
-  spam();
+
+  if (!stopSignal()) {
+    round += 1;
+    spam();
+  } else {
+    setTimeout(run, 30000, null);
+  }
 }
 
 //#############################################
@@ -113,10 +117,15 @@ function spam () {
 
 }
 
-
 //#############################################
 //##                 HELPER                  ##
 //#############################################
+
+function stopSignal () {
+
+    return false;
+    // return (lastTxWithControlTag().signal == run ? false : true);
+}
 
 function generateSeed () {
  var address = "";
