@@ -1,2 +1,2 @@
 # iota-spammer.js
-A spammer application for the Tangle to increase tx throughput
+Spammer application for the IOTA-Tangle to increase tx throughput.
