@@ -128,13 +128,13 @@ function stopSignal () {
 }
 
 function generateSeed () {
- var address = "";
+ var seed = "";
  var trytes = "ABCDEFGHIJKLMNOPQRSTUVWXYZ9";
 
  for (var i = 0; i < 81; i++)
-   address += trytes.charAt(Math.floor(Math.random() * trytes.length));
+   seed += trytes.charAt(Math.floor(Math.random() * trytes.length));
 
- return address;
+ return seed;
 }
 
 function dbg (msg) {
